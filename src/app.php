@@ -1,12 +1,14 @@
 <?php
 
-class Reader {
+namespace Sebsel\Reader;
+
+class App {
 
   function start() {
 
     $entries = $this->entries();
 
-    template('reader', [
+    template('main', [
       'entries' => $entries
     ]);
   }

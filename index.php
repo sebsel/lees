@@ -4,8 +4,8 @@ require_once(__DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 't
 require_once(__DIR__ . DS . 'src' . DS . 'helpers.php');
 
 load([
-  'reader' => __DIR__ . DS . 'src' . DS . 'reader.php',
-  'entry'  => __DIR__ . DS . 'src' . DS . 'entry.php',
+  'sebsel\\reader\\app' => __DIR__ . DS . 'src' . DS . 'app.php',
+  'sebsel\\reader\\entry'  => __DIR__ . DS . 'src' . DS . 'entry.php',
 ]);
 
-(new Reader())->start();
+(new Sebsel\Reader\App())->start();
