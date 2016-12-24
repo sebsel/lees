@@ -22,7 +22,7 @@ class Entry extends Obj {
       $this->year = $arg[0];
       $this->day = $arg[1];
       $this->filename = $arg[2];
-      $this->path = CONTENT_DIR.DS.$this->year.DS.$this->day;
+      $this->path = ENTRIES_DIR.DS.$this->year.DS.$this->day;
 
       if (substr($this->filename,-4) != '.txt') $this->filename .= '.txt';
       if (f::exists($this->path.DS.'-'.$this->filename)) $this->filename = '-'.$this->filename;
@@ -71,15 +71,5 @@ class Entry extends Obj {
     else $newname = '-'.$this->filename;
 
     f::move($this->path.DS.$this->filename, $this->path.DS.$newname);
-  }
-}
-
-class Author extends Obj {
-  function __toString() {
-    if (isset($this->name))
-      return $this->name();
-
-    if (isset($this->url))
-      return url::host($this->url());
   }
 }

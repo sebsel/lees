@@ -11,15 +11,20 @@ use Yaml;
 class Reader {
 
   public $years;
+  public $subscriptions;
 
-  function __construct() {
-    $this->years = new Collection();
+  function subscriptions() {
+    if (isset($this->subscriptions)) return $this->subscriptions;
 
-    $years = dir::read(CONTENT_DIR);
+    $this->subscriptions = new Collection();
 
-    foreach ($years as $year) {
-      $this->years->append($year, new Year($year));
+    $subscriptions = dir::read(SUBSCRIPTIONS_DIR);
+
+    foreach ($subscriptions as $sub) {
+      $this->subscriptions->append($sub, new Subscription($sub));
     }
+
+    return $this->subscriptions;
   }
 
   function entries() {
@@ -27,12 +32,12 @@ class Reader {
     return $articles->sortBy('published', 'desc');
   }
 
-  protected function more($date = null, $num = 20, &$dateTomorrow = null) {
+  protected function more($date = null, $num = 20) {
 
     $articles = new Collection();
 
     // To prevent counting down the years, get the oldest year
-    $beginning = $this->years->first()->year.'/001';
+    $beginning = $this->years()->first()->year().'/001';
 
     // If there is no $day, start today
     if ($date == null) $date = strftime('%Y/%j');
@@ -40,7 +45,7 @@ class Reader {
     // If day is a date (YYYY-ddd), look for the first day-page before that
     if (v::match($date, '![0-9]{4}/[0-9]{3}!')) {
 
-      while (!$a = dir::read(CONTENT_DIR . DS . $date)
+      while (!$a = dir::read(ENTRIES_DIR . DS . $date)
         and $date > $beginning) {
 
         $date = date_decrement($date);
@@ -62,22 +67,18 @@ class Reader {
 
     return $articles;
   }
-}
 
-class Year {
+  function years() {
+    if (isset($this->years)) return $this->years;
 
-  public $year;
-  public $days;
+    $this->years = new Collection();
 
-  function __construct($year) {
-    $this->year = $year;
-  }
+    $years = dir::read(ENTRIES_DIR);
 
-  function days() {
-    if (isset($this->days)) return $this->days;
+    foreach ($years as $year) {
+      $this->years->append($year, new Year($year));
+    }
 
-    $days = dir::read(CONTENT_DIR . DS . $this->year);
-
-    return $this->days = $days;
+    return $this->years;
   }
 }

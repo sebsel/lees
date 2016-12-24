@@ -5,3 +5,8 @@
     <title>Reader</title>
   </head>
   <body>
+
+  <nav>
+    <a href="/">Read</a>
+    <a href="/subscriptions">Subscriptions</a>
+  </nav>

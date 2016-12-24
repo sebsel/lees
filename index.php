@@ -1,4 +1,8 @@
 <?php
+namespace Sebsel\Lees;
+
+use V, F, Str, Yaml, Header, Dir, Url, Error;
+
 require_once 'bootstrap.php';
 
 router([
@@ -6,8 +10,22 @@ router([
     'pattern' => '/',
     'action' => function() {
 
-      (new \Sebsel\Lees\App())->start();
+      $entries = (new Reader())->entries();
 
+      template('main', [
+        'entries' => $entries
+      ]);
+    }
+  ],
+  [
+    'pattern' => 'subscriptions',
+    'action' => function() {
+
+      $subscriptions = (new Reader())->subscriptions();
+
+      template('subscriptions', [
+        'subscriptions' => $subscriptions
+      ]);
     }
   ],
   [
@@ -15,7 +33,7 @@ router([
     'action' => function($year, $day, $entry) {
 
       try {
-        $entry = new \Sebsel\Lees\Entry($year.'/'.$day.'/'.$entry);
+        $entry = new Entry($year.'/'.$day.'/'.$entry);
         $entry->toggleRead();
 
       } catch (Error $e) {
@@ -28,7 +46,7 @@ router([
   ],
   [
     'pattern' => '(subscribe|unsubscribe)',
-    'method' => 'POST',
+    'method' => 'GET|POST',
     'action' => function($action) {
 
       $feed = get('url');
@@ -54,7 +72,7 @@ router([
           $filename = '0-'.$filename;
           yaml::write(SUBSCRIPTIONS_DIR.DS.$filename, $content);
 
-          (new \Sebsel\Lees\Errandboy())->fetchPosts($filename);
+          (new Errandboy())->fetchPosts($filename);
 
           go('/');
 
