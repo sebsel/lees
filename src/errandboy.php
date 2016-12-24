@@ -6,7 +6,7 @@
  *
  */
 
-namespace Sebsel\Reader;
+namespace Sebsel\Lees;
 
 use Obj, F, Dir, Remote, Yaml;
 

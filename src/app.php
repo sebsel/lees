@@ -1,6 +1,6 @@
 <?php
 
-namespace Sebsel\Reader;
+namespace Sebsel\Lees;
 
 class App {
 

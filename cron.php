@@ -1,4 +1,4 @@
 <?php
 require_once 'bootstrap.php';
 
-(new Sebsel\Reader\Errandboy())->go();
+(new Sebsel\Lees\Errandboy())->go();
