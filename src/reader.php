@@ -4,7 +4,7 @@ namespace Sebsel\Lees;
 
 use Collection;
 use Dir;
-use F, A, V;
+use F, A, V, C;
 use Obj;
 use Yaml;
 
@@ -23,7 +23,8 @@ class Reader {
   }
 
   function entries() {
-    return $this->more();
+    $articles = $this->more();
+    return $articles->sortBy('published', 'desc');
   }
 
   protected function more($date = null, $num = 20, &$dateTomorrow = null) {
@@ -50,10 +51,9 @@ class Reader {
 
     // Get the articles from the day and filter them
     foreach ($a as $article) {
-      if ($article[0] == '.') continue;
-      $data = yaml::read(CONTENT_DIR . DS . $date . DS . $article);
-      $data = array_change_key_case($data, CASE_LOWER);
-      $articles->append($article, new Entry($data));
+      if (c::get('filter-read', true) and $article[0] == '-') continue;
+
+      $articles->append($article, new Entry($date.'/'.$article));
     }
 
     if ($articles->count() < $num) $articles = $articles->merge(

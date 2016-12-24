@@ -14,3 +14,15 @@ function date_decrement($date) {
   if ($day < 1) { $year--; $day = 366; }
   return $year . '/' . str_pad($day, 3, '0', STR_PAD_LEFT);
 }
+
+function router($routes) {
+  $router = new Router($routes);
+  $route = $router->run();
+
+  if (is_callable($route->action)) {
+    call($route->action, $route->arguments);
+  } else {
+    header::status(404);
+    echo 'Not found.';
+  }
+}

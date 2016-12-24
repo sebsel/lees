@@ -57,6 +57,8 @@ class Errandboy {
 
         if (!isset($entry['published']))
           $entry['published'] = strftime('%F %T');
+        else
+          $entry['published'] = strftime('%F %T', strtotime($entry['published']));
 
         $path = CONTENT_DIR . DS . strftime('%Y/%j', strtotime($entry['published']));
 
