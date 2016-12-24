@@ -67,7 +67,7 @@ class Errandboy {
         $content = yaml::encode($entry);
 
         if (!f::exists($path.DS.$filename)
-          and !f::exists($path.DS.'.'.$filename)) {
+          and !f::exists($path.DS.'-'.$filename)) {
           dir::make($path);
 
           f::write($path . DS . $filename, $content);
