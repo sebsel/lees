@@ -1,9 +1,11 @@
 <?php
 namespace Sebsel\Lees;
 
-use V, F, Str, Yaml, Header, Dir, Url, Error;
+use C, V, F, Str, Yaml, Header, Dir, Url, Error, Remote, S, Cookie;
 
 require_once 'bootstrap.php';
+
+require_login();
 
 router([
   [
@@ -68,6 +70,40 @@ router([
       }
     }
   ],
+  [
+    'pattern' => 'auth',
+    'action' => function() {
+      $r = remote::post('https://indieauth.com/auth', [
+        'data' => [
+          'code' => get('code'),
+          'redirect_uri' => url::base().'/auth',
+          'client_id' => url::base().'/'
+        ]
+      ]);
+
+      parse_str($r->content(), $auth);
+
+      if ($auth['me'] == c::get('user')) {
+        cookie::set(
+          'lees_session',
+          sha1(c::get('user') . c::get('salt')),
+          60 * 24 * 30
+        );
+        go('/');
+      } else {
+        die('Sorry, no entry for you');
+      }
+
+      go('/');
+    }
+  ],
+  [
+    'pattern' => 'logout',
+    'action' => function () {
+      cookie::remove('lees_session');
+    }
+  ],
+  [
     'pattern' => '(subscribe|unsubscribe)',
     'method' => 'GET|POST',
     'action' => function($action) {
@@ -80,7 +116,7 @@ router([
         'url' => $feed
       ];
 
-      $filename = str_replace('/',':', url::short($feed)).'.txt';
+      $filename = f::safeName(url::short($feed)).'.txt';
 
       $found = false;
       foreach(dir::read(SUBSCRIPTIONS_DIR) as $file) {

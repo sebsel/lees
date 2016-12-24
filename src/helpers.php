@@ -26,3 +26,11 @@ function router($routes) {
     echo 'Not found.';
   }
 }
+
+function require_login() {
+  if (url::path() != 'auth'
+    and cookie::get('lees_session') != sha1(c::get('user') . c::get('salt'))) {
+    template('login');
+    exit();
+  }
+}
