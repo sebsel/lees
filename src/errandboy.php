@@ -10,6 +10,8 @@ namespace Sebsel\Lees;
 
 use Obj, F, Dir, Remote, Str, Yaml, Error;
 
+if (!defined('CRON_LOG')) define('CRON_LOG', false);
+
 class Errandboy {
 
   function go() {
@@ -34,11 +36,14 @@ class Errandboy {
     return $subscriptions;
   }
 
-  function fetchPosts($feed) {
+  function fetchPosts($feed, $log = false) {
+
+    if (is_string($feed) and f::exists(SUBSCRIPTIONS_DIR.DS.$feed))
+      $feed = new Subscription($feed);
 
     $r = remote::get($feed->url());
 
-    echo $r->code . " " . $feed->url() . "\n";
+    if (CRON_LOG) echo $r->code . " " . $feed->url() . "\n";
     if ($r->code != 200) return;
 
     $data = mf2::parse($r->content, $feed->url());
@@ -75,7 +80,7 @@ class Errandboy {
           dir::make($path);
 
           f::write($path . DS . $filename, $content);
-          echo " - ".$entry['url']."\n";
+          if (CRON_LOG) echo " - ".$entry['url']."\n";
         }
       }
 
@@ -83,7 +88,7 @@ class Errandboy {
       sleep(1);
 
     } else {
-      echo "no new items\n";
+      if (CRON_LOG) echo "no new items\n";
     }
   }
 
@@ -107,7 +112,7 @@ class Subscription extends Obj {
     }
   }
 
-  function setNextTime() {
+  function setNextTime($log = false) {
     $oldfilename = $this->filename;
 
     $newtime = time() + (60*60*4);
@@ -121,7 +126,7 @@ class Subscription extends Obj {
       throw new Error("Could not enter new time");
     }
 
-    echo "> next check on ".strftime('%T %F', $newtime)."\n";
+    if (CRON_LOG) echo "> next check on ".strftime('%T %F', $newtime)."\n";
   }
 
   function time() {
