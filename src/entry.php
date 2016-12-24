@@ -37,6 +37,6 @@ class Author extends Obj {
       return $this->name();
 
     if (isset($this->url))
-      return url::base($this->url());
+      return url::host($this->url());
   }
 }

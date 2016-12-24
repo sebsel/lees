@@ -16,7 +16,6 @@ class Reader {
     $this->years = new Collection();
 
     $years = dir::read(CONTENT_DIR);
-    sort($years);
 
     foreach ($years as $year) {
       $this->years->append($year, new Year($year));
@@ -51,6 +50,7 @@ class Reader {
 
     // Get the articles from the day and filter them
     foreach ($a as $article) {
+      if ($article[0] == '.') continue;
       $data = yaml::read(CONTENT_DIR . DS . $date . DS . $article);
       $data = array_change_key_case($data, CASE_LOWER);
       $articles->append($article, new Entry($data));
@@ -77,7 +77,6 @@ class Year {
     if (isset($this->days)) return $this->days;
 
     $days = dir::read(CONTENT_DIR . DS . $this->year);
-    sort($days);
 
     return $this->days = $days;
   }
