@@ -2,6 +2,7 @@
 require_once(__DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'toolkit' . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
 require_once(__DIR__ . DS . 'src' . DS . 'helpers.php');
+require_once(__DIR__ . DS . 'config' . DS . 'config.php');
 
 date_default_timezone_set('UTC');
 

@@ -1,8 +1,6 @@
 <?php
 require_once 'bootstrap.php';
 
-c::set('filter-read', true);
-
 router([
   [
     'pattern' => '/',
