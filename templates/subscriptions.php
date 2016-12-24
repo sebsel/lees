@@ -9,7 +9,7 @@
 
     <div>
       <?=$sub->url()?>
-      <a href="/unsubscribe?url=<?=urlencode($sub->filename())?>">Unsub</a>
+      <a href="/unsubscribe?url=<?=urlencode($sub->url())?>">Unsub</a>
     </div>
 
   <?php endforeach; ?>

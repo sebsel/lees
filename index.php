@@ -45,6 +45,29 @@ router([
     }
   ],
   [
+    'pattern' => '(like|bookmark)',
+    'method' => 'GET|POST',
+    'action' => function($action) {
+
+      $url = get('url');
+
+      if (!v::url($url)) die('Url not valid');
+
+      if ($action == 'like') {
+        $link = micropub::like($url);
+      } else {
+        $link = micropub::bookmark($url);
+      }
+
+      if ($link) {
+        // This is a hack to trigger the kirby-webmentions plugin to send mentions
+        remote::get($link);
+        go('/');
+      } else {
+        echo "Micropub endpoint rejected the post";
+      }
+    }
+  ],
     'pattern' => '(subscribe|unsubscribe)',
     'method' => 'GET|POST',
     'action' => function($action) {

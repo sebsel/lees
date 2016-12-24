@@ -13,6 +13,7 @@ load([
   'sebsel\\lees\\reader'    => $src . DS . 'reader.php',
   'sebsel\\lees\\errandboy' => $src . DS . 'errandboy.php',
   'sebsel\\lees\\mf2'       => $src . DS . 'mf2.php',
+  'sebsel\\lees\\micropub'  => $src . DS . 'micropub.php',
 
   'sebsel\\lees\\entry'         => $obj . DS . 'entry.php',
   'sebsel\\lees\\author'        => $obj . DS . 'author.php',

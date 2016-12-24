@@ -9,6 +9,8 @@
   <small>by <?=$entry->author() ?></small>
   <p><?= $entry->content() ?></p>
   <a href="<?=$entry->url()?>"><?=$entry->published()?></a>
+  <a href="/like/?url=<?= urlencode($entry->url())?> ">Like</a>
+  <a href="/bookmark/?url=<?= urlencode($entry->url()) ?>">Bookmark</a>
   <a href="/read/<?=$entry->id()?>">Mark as read</a>
 </div>
 <hr>
