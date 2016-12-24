@@ -8,7 +8,7 @@
 
 namespace Sebsel\Lees;
 
-use Obj, F, Dir, Remote, Yaml;
+use Obj, F, Dir, Remote, Str, Yaml, Error;
 
 class Errandboy {
 
@@ -16,16 +16,19 @@ class Errandboy {
 
     $errands = $this->getErrands();
 
-    foreach ($errands as $errand) {
+    if (count($errands)) foreach ($errands as $errand) {
       $this->fetchPosts($errand);
     }
   }
 
   function getErrands() {
-    $subscriptions = dir::read(SUBSCRIPTIONS_DIR);
+    $subs = dir::read(SUBSCRIPTIONS_DIR);
 
-    foreach ($subscriptions as $k => $sub) {
-      $subscriptions[$k] = f::read(SUBSCRIPTIONS_DIR . DS . $sub);
+    if (count($subs)) foreach ($subs as $k => $sub) {
+      $time = str::before($sub, '-');
+      if ($time < time()) {
+        $subscriptions[$k] = new Subscription($sub);
+      }
     }
 
     return $subscriptions;
@@ -33,11 +36,12 @@ class Errandboy {
 
   function fetchPosts($feed) {
 
-    $r = remote::get($feed);
+    $r = remote::get($feed->url());
 
-    echo $r->code . " ".$feed."<br>\n";
+    echo $r->code . " " . $feed->url() . "\n";
+    if ($r->code != 200) return;
 
-    $data = mf2::parse($r->content, $feed);
+    $data = mf2::parse($r->content, $feed->url());
     $data = mf2::tojf2($data);
 
     if (isset($data['children'])) {
@@ -51,7 +55,7 @@ class Errandboy {
         if (!isset($entry['uid']) and isset($entry['url']))
           $entry['uid'] = $entry['url'];
         if (!isset($entry['uid']) and isset($entry['published']))
-          $entry['uid'] = $feed.'|'.strtotime($entry['published']);
+          $entry['uid'] = $feed->url().'|'.strtotime($entry['published']);
         if (!isset($entry['uid']))
           $entry['uid'] = uniqid();
 
@@ -71,11 +75,15 @@ class Errandboy {
           dir::make($path);
 
           f::write($path . DS . $filename, $content);
-          echo " - ".$entry['url']."<br>\n";
+          echo " - ".$entry['url']."\n";
         }
       }
+
+      $feed->setNextTime();
+      sleep(1);
+
     } else {
-      echo "no new items<br>\n";
+      echo "no new items\n";
     }
   }
 
@@ -84,6 +92,41 @@ class Errandboy {
   }
 }
 
-class Errand extends Obj {
+class Subscription extends Obj {
+
+  public $filename;
+  public $time;
+
+  function __construct($filename) {
+    if (f::exists(SUBSCRIPTIONS_DIR.DS.$filename)) {
+      $this->filename = $filename;
+      $data = yaml::read(SUBSCRIPTIONS_DIR.DS.$this->filename);
+      parent::__construct($data);
+    } else {
+      throw new Error('No such subscription');
+    }
+  }
+
+  function setNextTime() {
+    $oldfilename = $this->filename;
+
+    $newtime = time() + (60*60*4);
+
+    $this->filename = $newtime.'-'.str::after($this->filename, '-');
+
+    try {
+      f::move(SUBSCRIPTIONS_DIR.DS.$oldfilename, SUBSCRIPTIONS_DIR.DS.$this->filename);
+
+    } catch (Exception $e) {
+      throw new Error("Could not enter new time");
+    }
+
+    echo "> next check on ".strftime('%T %F', $newtime)."\n";
+  }
+
+  function time() {
+    if (isset($this->time)) return $this->time;
+    return $this->time = str::before($this->filename, '-');
+  }
 
 }
