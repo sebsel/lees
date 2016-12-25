@@ -2,6 +2,7 @@ html {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 300;
   font-size: 110%;
+  padding: 0 .5em;
 }
 
 a {
@@ -81,7 +82,11 @@ h1 {
 .options a {
   background: #eee;
   color: #999;
-  padding: .1em .5em;
+  display: inline-block;
+  vertical-align: baseline;
+  padding: .2em .4em;
+  white-space: nowrap;
+  border-radius: 2px;
 }
 
 .subscription {
