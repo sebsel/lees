@@ -25,6 +25,7 @@ class Errandboy {
 
   function getErrands() {
     $subs = dir::read(SUBSCRIPTIONS_DIR);
+    $subscriptions = [];
 
     if (count($subs)) foreach ($subs as $k => $sub) {
       $time = str::before($sub, '-');
@@ -48,6 +49,9 @@ class Errandboy {
 
     $data = mf2::parse($r->content, $feed->url());
     $data = mf2::tojf2($data);
+
+    // TODO: check type=feed and search among children if not
+    // Then move this whole thing into a new function and call it on the feed
 
     if (isset($data['children'])) {
 

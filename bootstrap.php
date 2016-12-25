@@ -22,4 +22,5 @@ load([
 ]);
 
 define('ENTRIES_DIR',       __DIR__ . DS . 'data' . DS . 'entries');
+define('HCARDS_DIR', __DIR__ . DS . 'data' . DS . 'hcards');
 define('SUBSCRIPTIONS_DIR', __DIR__ . DS . 'data' . DS . 'subscriptions');

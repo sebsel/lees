@@ -4,7 +4,7 @@ namespace Sebsel\Lees;
 
 use Obj;
 use Yaml;
-use A, F;
+use A, F, V;
 use Url;
 use Error;
 
@@ -50,6 +50,9 @@ class Entry extends Obj {
   function author() {
     if (is_array($this->author))
       return $this->author = new Author($this->get('author'));
+    if (v::url($this->author))
+      return $this->author = new Author(['url' => $this->get('author')]);
+
     return $this->author;
   }
 
@@ -71,5 +74,21 @@ class Entry extends Obj {
     else $newname = '-'.$this->filename;
 
     f::move($this->path.DS.$this->filename, $this->path.DS.$newname);
+  }
+
+  function hasName() {
+    if (!$this->name()) return false;
+
+    $a = substr($this->name(), 0, 30);
+    $b = substr($this->content(), 0, 30);
+
+    $diff = levenshtein($a,$b)/strlen($a);
+
+    return ($diff > 0.2);
+  }
+
+  public function __call($method, $arguments) {
+    $method = str_replace('_', '-', $method);
+    return isset($this->$method) ? $this->$method : null;
   }
 }

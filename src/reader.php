@@ -29,10 +29,10 @@ class Reader {
 
   function entries() {
     $articles = $this->more();
-    return $articles->sortBy('published', 'desc');
+    return $articles->sortBy('published', 'desc')->limit(10);
   }
 
-  protected function more($date = null, $num = 20) {
+  protected function more($date = null, $num = 10) {
 
     $articles = new Collection();
 
