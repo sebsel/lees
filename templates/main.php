@@ -1,6 +1,12 @@
 <?php template('header') ?>
 
-  This is an IndieWeb Reader.
+  <header>
+    This is an IndieWeb Reader.
+  </header>
+
+  <?php if (!count($entries)): ?>
+    Nothing to read! Come back later :)
+  <?php endif; ?>
 
   <?php foreach ($entries as $entry): ?>
 

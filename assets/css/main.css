@@ -1,0 +1,97 @@
+html {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  font-size: 110%;
+}
+
+a {
+  color: #0af;
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.6;
+}
+
+.right {
+  float: right;
+}
+
+.entry {
+  margin: 2em auto;
+}
+
+.content {
+  margin: 0.5em auto;
+}
+
+.author {
+  font-size: 0.8em;
+  margin: .2em;
+}
+
+.inner {
+  margin-left: 1.2em;
+}
+
+img.logo {
+  height: 1em;
+  border-radius: 2px;
+  margin-bottom: 2px;
+  vertical-align: text-bottom;
+}
+
+.read {
+  border: solid 4px red;
+}
+
+nav.menu, header {
+  margin-top: .5em;
+  margin-bottom: 1em;
+}
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.entry figure {
+  width: 100%;
+}
+
+.entry figure img {
+  width: 100%;
+}
+
+h1 {
+  font-size: 1.1em;
+  margin: .3em .1em;
+  font-weight: 400;
+}
+
+.options {
+  font-size: 0.8em;
+}
+
+.options .date {
+  background: none;
+  color: inherit;
+}
+
+.options a {
+  background: #eee;
+  color: #999;
+  padding: .1em .5em;
+}
+
+.subscription {
+  margin: 1em auto;
+}
+
+.subscription .url {
+  overflow-x: scroll;
+  border: #eee solid 2px;
+  border-radius: 3px;
+  padding: .4em .6em;
+  margin-bottom: .2em;
+}
