@@ -42,7 +42,7 @@ class Errandboy {
     if (is_string($feed) and f::exists(SUBSCRIPTIONS_DIR.DS.$feed))
       $feed = new Subscription($feed);
 
-    $r = remote::get($feed->url());
+    $r = remote::get($feed->feedurl());
 
     if (CRON_LOG) echo $r->code . " " . $feed->url() . "\n";
     if ($r->code != 200) return;

@@ -17,3 +17,8 @@ c::set('salt', 'hExijmxB4RhoY14VaOpxgC4WDDHgOI');
 # c::set('micropub-endpoint', 'http://example.com/micropub');
 # c::set('micropub-access-token', '...');
 // TODO: let this thing obtain access tokens automatically
+
+// Twitter access token for https://granary-demo.appspot.com
+# c::set('twitter-access-token-key', '');
+# c::set('twitter-access-token-secret', '');
+// TODO: use granary as library and generate tokens yourself

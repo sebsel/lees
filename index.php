@@ -131,9 +131,7 @@ router([
           $filename = '0-'.$filename;
           yaml::write(SUBSCRIPTIONS_DIR.DS.$filename, $content);
 
-          (new Errandboy())->fetchPosts($filename);
-
-          go('/');
+          go('/subscriptions');
 
         } else {
           echo "You're already subscribed";
@@ -141,7 +139,7 @@ router([
       } else {
         if ($found) {
           f::remove(SUBSCRIPTIONS_DIR.DS.$found);
-          go('/');
+          go('/subscriptions');
 
         } else {
           echo "No such subscription found";

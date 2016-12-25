@@ -2,12 +2,13 @@
 
 namespace Sebsel\Lees;
 
-use Obj, Str, Yaml, F;
+use Obj, Str, Yaml, C, F, Url;
 
 class Subscription extends Obj {
 
   public $filename;
   public $time;
+  public $convertedUrl;
 
   function __construct($filename) {
     if (f::exists(SUBSCRIPTIONS_DIR.DS.$filename)) {
@@ -17,6 +18,33 @@ class Subscription extends Obj {
     } else {
       throw new Error('No such subscription');
     }
+  }
+
+  function feedurl() {
+    if (isset($this->convertedUrl)) return $this->convertedUrl;
+
+    $url = $this->url;
+
+    if (url::host($url) == 'twitter.com' and c::get('twitter-access-token-key', false) and c::get('twitter-access-token-secret', false)) {
+      $query = false;
+
+      if (url::path($url) == 'search') {
+        $params = url::params($url);
+        $query = $params['q'];
+
+      } elseif (!str::contains(url::path($url), '/')) {
+        $query = 'from%3A'.url::path($url);
+      }
+
+      if ($query) {
+        $url = 'https://granary-demo.appspot.com/twitter/%40me/@search/@app/?search_query='.$query.'&format=html&access_token_key='.c::get('twitter-access-token-key').'&access_token_secret='.c::get('twitter-access-token-secret').'';
+      }
+
+    } elseif (url::host($url) == 'instagram.com') {
+      $url = 'https://granary-demo.appspot.com/instagram/'.url::path($url).'/@self/@app/?format=html';
+    }
+
+    return $this->convertedUrl = $url;
   }
 
   function setNextTime($log = false) {
