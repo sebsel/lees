@@ -134,7 +134,7 @@ router([
     }
   ],
   [
-    'pattern' => '(subscribe|unsubscribe)',
+    'pattern' => '(subscribe|unsubscribe|check-now)',
     'method' => 'GET|POST',
     'action' => function($action) {
 
@@ -167,9 +167,20 @@ router([
         } else {
           echo "You're already subscribed";
         }
-      } else {
+
+      } elseif ($action == 'unsubscribe') {
         if ($found) {
           f::remove(SUBSCRIPTIONS_DIR.DS.$found);
+          go('/subscriptions');
+
+        } else {
+          echo "No such subscription found";
+        }
+
+      } elseif ($action == 'check-now') {
+        if ($found) {
+          $name = str::after($found, '-');
+          f::move(SUBSCRIPTIONS_DIR.DS.$found, SUBSCRIPTIONS_DIR.DS.'0-'.$name);
           go('/subscriptions');
 
         } else {

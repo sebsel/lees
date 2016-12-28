@@ -10,8 +10,13 @@
 
     <div class="subscription">
       <div class="url"><?=$sub->url()?></div>
-      <div class="options">
-        <a href="/unsubscribe?url=<?=urlencode($sub->url())?>" class="right"><?=l::get('unsubscribe', 'Unsubscribe')?></a>
+      <div class="options right">
+        <a href="/check-now?url=<?=urlencode($sub->url())?>">
+          <?=l::get('check-now', 'Check now')?>
+        </a>
+        <a href="/unsubscribe?url=<?=urlencode($sub->url())?>">
+          <?=l::get('unsubscribe', 'Unsubscribe')?>
+        </a>
       </div>
 
       <div class="date">

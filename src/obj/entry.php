@@ -30,7 +30,7 @@ class Entry extends Obj {
           break;
         }
       }
-      
+
       $this->filename = $file;
 
       if (!f::exists($this->path.DS.$this->filename)) {
@@ -103,7 +103,7 @@ class Entry extends Obj {
 
   static function exists($id) {
     $id = explode('/', $id);
-    foreach(dir::read(CONTENT_DIR.DS.$id[0].DS.$id[1]) as $file) {
+    foreach(dir::read(ENTRIES_DIR.DS.$id[0].DS.$id[1]) as $file) {
       if (substr($file, 0, 13) == $id[2]) {
         return true;
       }

@@ -23,6 +23,7 @@ l::set('read-later', 'Lees later');
 l::set('mark-all-read', 'Markeer alles als gelezen');
 l::set('subscribe', 'Volgen');
 l::set('unsubscribe', 'Ontvolgen');
+l::set('check-now', 'Check nu');
 
 // Menu
 l::set('new', 'Nieuw');
