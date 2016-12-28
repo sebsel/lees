@@ -29,8 +29,8 @@ class Subscription extends Obj {
       $query = false;
 
       if (url::path($url) == 'search') {
-        $params = url::params($url);
-        $query = $params['q'];
+        $params = url::query($url);
+        $query = urlencode($params['q']);
 
       } elseif (!str::contains(url::path($url), '/')) {
         $query = 'from%3A'.url::path($url);
@@ -52,6 +52,7 @@ class Subscription extends Obj {
 
     $newtime = time() + (60*60*4);
 
+    // TODO: this line in the try
     $this->filename = $newtime.'-'.str::after($this->filename, '-');
 
     try {

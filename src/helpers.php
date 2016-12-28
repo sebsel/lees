@@ -15,6 +15,10 @@ function date_decrement($date) {
   return $year . '/' . str_pad($day, 3, '0', STR_PAD_LEFT);
 }
 
+function fdate($format, $date) {
+  return strftime($format, strtotime($date));
+}
+
 function router($routes) {
   $router = new Router($routes);
   $route = $router->run();

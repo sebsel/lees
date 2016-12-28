@@ -11,7 +11,7 @@
 
 <div class="container">
   <nav class="menu">
-    <a href="/">Read</a>
-    <a href="/subscriptions">Subscriptions</a>
-    <a href="/logout" class="right">Logout</a>
+    <a href="/"><?=l::get('read', 'Read')?></a>
+    <a href="/subscriptions"><?=l::get('subscriptions', 'Subscriptions')?></a>
+    <a href="/logout" class="right"><?=l::get('logout', 'Logout')?></a>
   </nav>

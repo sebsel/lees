@@ -70,13 +70,14 @@ h1 {
   font-weight: 400;
 }
 
-.options {
+.options, .date {
   font-size: 0.8em;
+  display: block;
+  color: inherit;
 }
 
-.options .date {
-  background: none;
-  color: inherit;
+.options {
+  float: right;
 }
 
 .options a {
@@ -85,7 +86,6 @@ h1 {
   display: inline-block;
   vertical-align: baseline;
   padding: .2em .4em;
-  white-space: nowrap;
   border-radius: 2px;
 }
 

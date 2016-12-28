@@ -6,14 +6,38 @@
 
     <?=$entry->author() ?>
 
-    <?php if ($entry->like_of()): ?>
-      likes
-      <a href="<?php echo $entry->like_of() ?>">this</a>
-    <?php endif; ?>
-    <?php if ($entry->bookmark_of()): ?>
-      bookmarked
-      <a href="<?php echo $entry->bookmark_of() ?>">this</a>
-    <?php endif; ?>
+    <?php
+      if ($entry->like_of()) {
+        printf(
+          l::get('likes', 'likes %s'),
+          html::a(
+            $entry->like_of(),
+            l::get('this', 'this')
+          )
+        );
+      }
+
+      if ($entry->bookmark_of()) {
+        printf(
+          l::get('bookmarked', 'bookmarked %s'),
+          html::a(
+            $entry->bookmark_of(),
+            l::get('this', 'this')
+          )
+        );
+      }
+
+      if ($entry->in_reply_to()) {
+        printf(
+          l::get('replied', 'replied to %s'),
+          html::a(
+            $entry->in_reply_to(),
+            url::host($entry->in_reply_to())
+            // TODO: make this a h-card
+          )
+        );
+      }
+    ?>
   </div>
 
   <div class="inner">
@@ -24,7 +48,9 @@
     <?php endif; ?>
 
     <?php if ($entry->hasName()): ?>
-      <h1><?= $entry->name() ?></h1>
+      <a href="<?=$entry->url()?>">
+        <h1><?= $entry->name() ?></h1>
+      </a>
     <?php endif; ?>
 
     <?php if ($entry->photo()): ?>
@@ -38,10 +64,18 @@
       <p><?= html($entry->content()) ?></p>
     </div>
     <div class="options">
-      <a href="<?=$entry->url()?>" class="date"><?=$entry->published()?></a>
-      <a href="/like/?url=<?= urlencode($entry->url()) ?>">Like</a>
-      <a href="/bookmark/?url=<?= urlencode($entry->url()) ?>">Bookmark</a>
-      <a href="/read/<?=$entry->id()?>">Mark as read</a>
+      <a href="/like/?url=<?= urlencode($entry->url()) ?>">
+        <?= l::get('like', 'Like') ?>
+      </a>
+      <a href="/bookmark/?url=<?= urlencode($entry->url()) ?>">
+        <?= l::get('bookmark', 'Bookmark') ?>
+      </a>
+      <a href="/read/<?=$entry->id()?>">
+        <?= l::get('mark-as-read', 'Mark as read') ?>
+      </a>
     </div>
+
+    <a href="<?=$entry->url()?>" class="date"><?=fdate(l::get('datetime', '%c'), $entry->published())?></a>
+
   </div>
 </div>

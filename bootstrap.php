@@ -6,6 +6,8 @@ require_once(__DIR__ . DS . 'config' . DS . 'config.php');
 
 date_default_timezone_set('UTC');
 
+if (file_exists($lang = __DIR__ . DS . 'config' . DS . 'lang.' . c::get('language') . '.php')) require_once($lang);
+
 $src = __DIR__ . DS . 'src';
 $obj = __DIR__ . DS . 'src' . DS . 'obj';
 

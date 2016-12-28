@@ -116,7 +116,8 @@ router([
         'url' => $feed
       ];
 
-      $filename = f::safeName(url::short($feed)).'.txt';
+      $filename = str_replace('/', '-', url::short($feed));
+      $filename = f::safeName($filename.'.txt');
 
       $found = false;
       foreach(dir::read(SUBSCRIPTIONS_DIR) as $file) {

@@ -1,11 +1,11 @@
 <?php template('header') ?>
 
   <header>
-    This is an IndieWeb Reader.
+    <?=l::get('headline', 'This is an Indieweb Reader')?>
   </header>
 
   <?php if (!count($entries)): ?>
-    Nothing to read! Come back later :)
+    <?=l::get('no-entries', 'Nothing to read! Come back later :)')?>
   <?php endif; ?>
 
   <?php foreach ($entries as $entry): ?>

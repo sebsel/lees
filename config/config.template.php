@@ -4,6 +4,9 @@
  * Rename to /config/config.php
  */
 
+// Locale and language settings
+c::set('language', 'en');
+
 // Filter read items from the feed
 c::set('filter-read', true);
 
