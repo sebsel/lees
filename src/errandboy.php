@@ -10,8 +10,6 @@ namespace Sebsel\Lees;
 
 use Obj, F, Dir, Remote, Str, Yaml, Error;
 
-if (!defined('CRON_LOG')) define('CRON_LOG', false);
-
 class Errandboy {
 
   function go() {
@@ -44,8 +42,11 @@ class Errandboy {
 
     $r = remote::get($feed->feedurl());
 
-    if (CRON_LOG) echo $r->code . " " . $feed->url() . "\n";
-    if ($r->code != 200) return;
+    if ($r->code != 200) {
+      echo $r->code . " " . $feed->url() . "\n";
+      $feed->setNextTime();
+      continue;
+    }
 
     $data = mf2::parse($r->content, $feed->url());
     $data = mf2::tojf2($data);
@@ -79,16 +80,12 @@ class Errandboy {
 
         if (!entry::exists($id)) {
           f::write(ENTRIES_DIR . DS . $id . '.txt', $content);
-          if (CRON_LOG) echo " - ".$entry['url']."\n";
         }
       }
-
-      $feed->setNextTime();
-      sleep(1);
-
-    } else {
-      if (CRON_LOG) echo "no new items\n";
     }
+
+    $feed->setNextTime();
+    sleep(1);
   }
 
   function getCoffee() {

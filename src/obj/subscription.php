@@ -61,8 +61,6 @@ class Subscription extends Obj {
     } catch (Exception $e) {
       throw new Error("Could not enter new time");
     }
-
-    if (CRON_LOG) echo "> next check on ".strftime('%T %F', $newtime)."\n";
   }
 
   function time() {
