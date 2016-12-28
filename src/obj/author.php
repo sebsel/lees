@@ -41,10 +41,12 @@ class Author extends Obj {
   }
 
   function __toString() {
-    if (isset($this->name))
+    if (is_string($this->name))
       return $this->name();
 
     if (isset($this->url))
       return url::host($this->url());
+
+    return "unknown";
   }
 }

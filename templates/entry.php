@@ -1,4 +1,4 @@
-<div class="entry <?e($entry->read(), 'read')?>">
+<div class="entry">
   <div class="author">
     <?php if (is_a($entry->author(), 'Obj') and $entry->author()->photo()): ?>
       <img src="<?=$entry->author()->photo() ?>" class="logo">
@@ -70,9 +70,17 @@
       <a href="/bookmark/?url=<?= urlencode($entry->url()) ?>">
         <?= l::get('bookmark', 'Bookmark') ?>
       </a>
-      <a href="/read/<?=$entry->id()?>">
-        <?= l::get('mark-as-read', 'Mark as read') ?>
-      </a>
+      <? if (url::path()=='new'): ?>
+        <label for="later-<?=$entry->id()?>">
+          <?= l::get('read-later', 'Read later') ?>
+          <input type="hidden" name="all[]" value="<?=$entry->id()?>">
+          <input type="checkbox" name="later[<?=$entry->id()?>]" id="later-<?=$entry->id()?>">
+        </label>
+      <? else: ?>
+        <a href="/read/<?=$entry->id()?>">
+          <?= l::get('mark-as-read', 'Mark as read') ?>
+        </a>
+      <? endif ?>
     </div>
 
     <a href="<?=$entry->url()?>" class="date"><?=fdate(l::get('datetime', '%c'), $entry->published())?></a>

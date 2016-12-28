@@ -73,17 +73,12 @@ class Errandboy {
         else
           $entry['published'] = strftime('%F %T', strtotime($entry['published']));
 
-        $path = ENTRIES_DIR . DS . strftime('%Y/%j', strtotime($entry['published']));
-
-        $filename = strftime('%H%M%S', strtotime($entry['published'])) . '-' . sha1($entry['uid']) . '.txt';
+        $id = strftime('%Y/%j/%H%M%S', strtotime($entry['published'])) . '-' . substr(sha1($entry['uid']),0,6);
 
         $content = yaml::encode($entry);
 
-        if (!f::exists($path.DS.$filename)
-          and !f::exists($path.DS.'-'.$filename)) {
-          dir::make($path);
-
-          f::write($path . DS . $filename, $content);
+        if (!entry::exists($id)) {
+          f::write(ENTRIES_DIR . DS . $id . '.txt', $content);
           if (CRON_LOG) echo " - ".$entry['url']."\n";
         }
       }

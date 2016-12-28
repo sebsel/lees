@@ -4,6 +4,7 @@ namespace Sebsel\Lees;
 
 use Obj;
 use Yaml;
+use Dir;
 use A, F, V;
 use Url;
 use Error;
@@ -24,22 +25,23 @@ class Entry extends Obj {
       $this->filename = $arg[2];
       $this->path = ENTRIES_DIR.DS.$this->year.DS.$this->day;
 
-      if (substr($this->filename,-4) != '.txt') $this->filename .= '.txt';
-      if (f::exists($this->path.DS.'-'.$this->filename)) $this->filename = '-'.$this->filename;
-      elseif (!f::exists($this->path.DS.$this->filename)) {
+      foreach(dir::read($this->path) as $file) {
+        if (substr($file, 0, 13) == substr($this->filename, 0, 13)) {
+          break;
+        }
+      }
+      
+      $this->filename = $file;
+
+      if (!f::exists($this->path.DS.$this->filename)) {
         throw new Error('File not found, '.$this->path.DS.$this->filename);
       }
 
       $data = yaml::read($this->path.DS.$this->filename);
       $data = array_change_key_case($data, CASE_LOWER);
 
-      $this->read = false;
-
-      $id = substr($this->filename, 0, -4);
-      if (substr($id,0,1) == '-') {
-        $this->read = true;
-        $id = substr($id,1);
-      }
+      $this->status = substr($this->filename, 14, -4);
+      $id = substr($this->filename, 0, 13);
 
       $this->id = $this->year.'/'.$this->day.'/'.$id;
 
@@ -69,11 +71,18 @@ class Entry extends Obj {
     return a::first($this->content);
   }
 
-  function toggleRead() {
-    if (substr($this->filename,0,1) == '-') $newname = substr($this->filename,1);
-    else $newname = '-'.$this->filename;
+  function toggleRead($status = 'read') {
+    $name = substr($this->filename,0,13);
 
-    f::move($this->path.DS.$this->filename, $this->path.DS.$newname);
+    if ($this->status != $status) {
+      $this->status = $status;
+      $newname = $name.'-'.$status;
+    } else {
+      $this->status = null;
+      $newname = $name;
+    }
+
+    f::move($this->path.DS.$this->filename, $this->path.DS.$newname.".txt");
   }
 
   function hasName() {
@@ -90,5 +99,15 @@ class Entry extends Obj {
   public function __call($method, $arguments) {
     $method = str_replace('_', '-', $method);
     return isset($this->$method) ? $this->$method : null;
+  }
+
+  static function exists($id) {
+    $id = explode('/', $id);
+    foreach(dir::read(CONTENT_DIR.DS.$id[0].DS.$id[1]) as $file) {
+      if (substr($file, 0, 13) == $id[2]) {
+        return true;
+      }
+    }
+    return false;
   }
 }

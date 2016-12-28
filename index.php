@@ -11,8 +11,22 @@ router([
   [
     'pattern' => '/',
     'action' => function() {
+      go('read');
+    }
+  ],
+  [
+    'pattern' => '(new|read|archive)',
+    'action' => function($action) {
 
-      $entries = (new Reader())->entries();
+      if ($action == 'new') {
+        $filter = null; // no status
+      } elseif($action == 'read') {
+        $filter = 'later'; // things you want to read
+      } else {
+        $filter = 'read'; // archive: already read
+      }
+
+      $entries = (new Reader())->entries($filter);
 
       template('main', [
         'entries' => $entries
@@ -31,19 +45,35 @@ router([
     }
   ],
   [
-    'pattern' => 'read/(:num)/(:num)/(:any)',
-    'action' => function($year, $day, $entry) {
+    'pattern' => '(read|later)/(:num)/(:num)/(:any)',
+    'action' => function($status, $year, $day, $entry) {
 
       try {
         $entry = new Entry($year.'/'.$day.'/'.$entry);
-        $entry->toggleRead();
+        $entry->toggleRead($status);
 
       } catch (Error $e) {
         header::status(500);
-        echo "Could not mark post as read";
+        echo "Could not mark post as ".$status;
       }
 
       go('/');
+    }
+  ],
+  [
+    'pattern' => 'read-all',
+    'method' => 'POST',
+    'action' => function () {
+      $later = get('later');
+
+      foreach (get('all') as $entry) {
+        if (isset($later[$entry])) $status = 'later';
+        else $status = 'read';
+
+        (new Entry($entry))->toggleRead($status);
+      }
+
+      go('/new');
     }
   ],
   [

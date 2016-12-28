@@ -11,7 +11,20 @@
 
 <div class="container">
   <nav class="menu">
-    <a href="/"><?=l::get('read', 'Read')?></a>
-    <a href="/subscriptions"><?=l::get('subscriptions', 'Subscriptions')?></a>
-    <a href="/logout" class="right"><?=l::get('logout', 'Logout')?></a>
+    <a href="/new" class="<?e(url::path() == 'new', 'active')?>">
+      <?=l::get('new', 'New')?>
+    </a>
+    <a href="/read" class="<?e(url::path() == 'read', 'active')?>">
+      <?=l::get('read', 'Read')?>
+    </a>
+    <a href="/archive" class="<?e(url::path() == 'archive', 'active')?>">
+      <?=l::get('archive', 'Archive')?>
+    </a>
+    <a href="/subscriptions" class="<?e(url::path() == 'subscriptions', 'active')?>">
+      <?=l::get('subscriptions', 'Subscriptions')?>
+    </a>
+
+    <a href="/logout" class="right">
+      <?=l::get('logout', 'Logout')?>
+    </a>
   </nav>

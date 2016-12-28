@@ -23,7 +23,7 @@ function router($routes) {
   $router = new Router($routes);
   $route = $router->run();
 
-  if (is_callable($route->action)) {
+  if (isset($route) and is_callable($route->action)) {
     call($route->action, $route->arguments);
   } else {
     header::status(404);

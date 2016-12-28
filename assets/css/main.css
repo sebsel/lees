@@ -3,6 +3,7 @@ html {
   font-weight: 300;
   font-size: 110%;
   padding: 0 .5em;
+  background: #eee;
 }
 
 a {
@@ -16,6 +17,12 @@ a:hover {
 
 .right {
   float: right;
+}
+
+.cf:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .entry {
@@ -32,7 +39,10 @@ a:hover {
 }
 
 .inner {
-  margin-left: 1.2em;
+  background: white;
+  border-radius: 5px;
+  padding: .7em;
+  margin-top: .5em;
 }
 
 img.logo {
@@ -46,9 +56,18 @@ img.logo {
   border: solid 4px red;
 }
 
-nav.menu, header {
+nav.menu, header, footer {
   margin-top: .5em;
   margin-bottom: 1em;
+}
+
+nav.menu a {
+  margin: 0 .3em;
+}
+nav.menu a.active {
+  color: black;
+  font-weight: 400;
+  opacity: 1;
 }
 
 .container {
@@ -95,7 +114,7 @@ h1 {
 
 .subscription .url {
   overflow-x: scroll;
-  border: #eee solid 2px;
+  border: #ddd solid 2px;
   border-radius: 3px;
   padding: .4em .6em;
   margin-bottom: .2em;

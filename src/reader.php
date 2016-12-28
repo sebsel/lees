@@ -27,12 +27,12 @@ class Reader {
     return $this->subscriptions;
   }
 
-  function entries() {
-    $articles = $this->more();
-    return $articles->sortBy('published', 'desc')->limit(10);
+  function entries($status = null, $num = 10) {
+    $articles = $this->more($status, $num);
+    return $articles->sortBy('published', 'desc')->limit($num);
   }
 
-  protected function more($date = null, $num = 10) {
+  protected function more($status = null, $num = 20, $date = null) {
 
     $articles = new Collection();
 
@@ -56,13 +56,13 @@ class Reader {
 
     // Get the articles from the day and filter them
     foreach ($a as $article) {
-      if (c::get('filter-read', true) and $article[0] == '-') continue;
+      if ($status != substr($article, 14, -4)) continue;
 
       $articles->append($article, new Entry($date.'/'.$article));
     }
 
     if ($articles->count() < $num) $articles = $articles->merge(
-      $this->more(date_decrement($date), $num - $articles->count())
+      $this->more($status, $num - $articles->count(), date_decrement($date))
     );
 
     return $articles;
