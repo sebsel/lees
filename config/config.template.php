@@ -10,6 +10,12 @@ c::set('language', 'en');
 // Filter read items from the feed
 c::set('filter-read', true);
 
+// DB settings, see Kirby's docs
+c::set('db.type', 'sqlite');
+c::set('db.name', 'data'.DS.'database.db');
+// CREATE TABLE 'entry' ('id' TEXT PRIMARY KEY NOT NULL, 'status' TEXT)
+// with an index on 'status'
+
 // Your IndieAuth-enabled url
 c::set('user', 'https://yourindieauthurl.example/');
 

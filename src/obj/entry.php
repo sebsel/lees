@@ -4,7 +4,7 @@ namespace Sebsel\Lees;
 
 use Obj;
 use Yaml;
-use Dir;
+use Dir, Db;
 use A, F, V;
 use Url;
 use Error;
@@ -83,6 +83,10 @@ class Entry extends Obj {
     }
 
     f::move($this->path.DS.$this->filename, $this->path.DS.$newname.".txt");
+
+    db::update('entry', [
+      'status' => $this->status ? $this->status : 'new'
+    ], ['id' => $this->id]);
   }
 
   function hasName() {
@@ -109,5 +113,15 @@ class Entry extends Obj {
       }
     }
     return false;
+  }
+
+  static function create($id, $content) {
+    if (!entry::exists($id)) {
+      f::write(ENTRIES_DIR . DS . $id . '.txt', $content);
+      db::insert('entry', [
+        'id' => $id,
+        'status' => 'new'
+      ]);
+    }
   }
 }

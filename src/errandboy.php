@@ -37,15 +37,16 @@ class Errandboy {
 
   function fetchPosts($feed, $log = false) {
 
-    if (is_string($feed) and f::exists(SUBSCRIPTIONS_DIR.DS.$feed))
+    if (is_string($feed)) {
       $feed = new Subscription($feed);
+    }
 
     $r = remote::get($feed->feedurl());
 
     if ($r->code != 200) {
-      echo $r->code . " " . $feed->url() . "\n";
+      echo $r->code . " " . $feed->feedurl() . "\n";
       $feed->setNextTime();
-      continue;
+      return;
     }
 
     $data = mf2::parse($r->content, $feed->url());
@@ -78,9 +79,7 @@ class Errandboy {
 
         $content = yaml::encode($entry);
 
-        if (!entry::exists($id)) {
-          f::write(ENTRIES_DIR . DS . $id . '.txt', $content);
-        }
+        entry::create($id, $content);
       }
     }
 

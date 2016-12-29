@@ -1,7 +1,7 @@
 <?php
 namespace Sebsel\Lees;
 
-use C, V, F, Str, Yaml, Header, Dir, Url, Error, Remote, S, Cookie;
+use C, V, F, Str, Yaml, Header, Dir, Url, Error, Remote, S, Cookie, DB, Database;
 
 require_once 'bootstrap.php';
 
@@ -188,5 +188,30 @@ router([
         }
       }
     }
-  ]
+  ],
+  [
+    'pattern' => 'rebuild-index',
+    'action' => function() {
+      $path = ENTRIES_DIR;
+
+      echo "rebuilding index\n";
+      db::delete('entry');
+
+      foreach (dir::read($path) as $year) {
+        foreach (dir::read($path.DS.$year) as $day) {
+          foreach (dir::read($path.DS.$year.DS.$day) as $entry) {
+            $id = $year.'/'.$day.'/'.substr($entry,0,13);
+            $status = substr($entry,14,-4);
+            $status = $status ? $status : 'new';
+
+            db::insert('entry', [
+              'id' => $id,
+              'status' => $status
+            ]);
+            echo "$id $status\n";
+          }
+        }
+      }
+    }
+  ],
 ]);

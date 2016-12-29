@@ -4,9 +4,7 @@ namespace Sebsel\Lees;
 
 use Collection;
 use Dir;
-use F, A, V, C;
-use Obj;
-use Yaml;
+use Db;
 
 class Reader {
 
@@ -28,57 +26,14 @@ class Reader {
   }
 
   function entries($status = null, $num = 10) {
-    $articles = $this->more($status, $num);
-    return $articles->sortBy('published', 'desc')->limit($num);
-  }
+    $entries = new Collection();
+    $status = $status ? $status : 'new';
+    $dblist = db::select('entry', '*', ['status' => $status], 'id desc', 0,$num);
 
-  protected function more($status = null, $num = 20, $date = null) {
-
-    $articles = new Collection();
-
-    // To prevent counting down the years, get the oldest year
-    $beginning = $this->years()->first()->year().'/001';
-
-    // If there is no $day, start today
-    if ($date == null) $date = strftime('%Y/%j');
-
-    // If day is a date (YYYY-ddd), look for the first day-page before that
-    if (v::match($date, '![0-9]{4}/[0-9]{3}!')) {
-
-      while (!$a = dir::read(ENTRIES_DIR . DS . $date)
-        and $date > $beginning) {
-
-        $date = date_decrement($date);
-      }
-
-      if (empty($a)) return $articles; // empty Collection here
+    foreach ($dblist as $entry) {
+      $entries->append($n++, new Entry($entry->id));
     }
 
-    // Get the articles from the day and filter them
-    foreach ($a as $article) {
-      if ($status != substr($article, 14, -4)) continue;
-
-      $articles->append($article, new Entry($date.'/'.$article));
-    }
-
-    if ($articles->count() < $num) $articles = $articles->merge(
-      $this->more($status, $num - $articles->count(), date_decrement($date))
-    );
-
-    return $articles;
-  }
-
-  function years() {
-    if (isset($this->years)) return $this->years;
-
-    $this->years = new Collection();
-
-    $years = dir::read(ENTRIES_DIR);
-
-    foreach ($years as $year) {
-      $this->years->append($year, new Year($year));
-    }
-
-    return $this->years;
+    return $entries;
   }
 }
