@@ -18,15 +18,20 @@ router([
     'pattern' => '(new|read|archive)',
     'action' => function($action) {
 
+      $num = 10;
+
       if ($action == 'new') {
         $filter = null; // no status
       } elseif($action == 'read') {
         $filter = 'later'; // things you want to read
+        $num = 100; // we want more posts
       } else {
         $filter = 'read'; // archive: already read
       }
 
-      $entries = (new Reader())->entries($filter, 10);
+      $entries = (new Reader())->entries($filter, $num);
+
+      if($action == 'read') $entries = $entries->shuffle()->limit(10);
 
       template('main', [
         'entries' => $entries
