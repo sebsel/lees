@@ -20,7 +20,8 @@
       </div>
 
       <div class="date">
-        <?=l::get('next-check', 'Next check at') . strftime(' %H:%M', $sub->time()) ?>
+        <?=l::get('next-check', 'Next check at') .
+          ($sub->time() > 0 ? strftime(' %H:%M', $sub->time()) : ' -') ?>
       </div>
     </div>
 

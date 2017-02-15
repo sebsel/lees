@@ -4,6 +4,6 @@
     "license": "MIT",
     "require": {
         "getkirby/toolkit": "^2.4",
-        "mf2/mf2": "^0.3.0"
+        "mf2/mf2": "^0.3.0",
     }
 }

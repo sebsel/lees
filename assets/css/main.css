@@ -12,7 +12,7 @@ a {
 }
 
 a:hover {
-  opacity: 0.6;
+  color: #4dc4ff;
 }
 
 .right {
@@ -38,6 +38,10 @@ a:hover {
   margin: .2em;
 }
 
+.author .name {
+  color: black;
+}
+
 .inner {
   background: white;
   border-radius: 5px;
@@ -45,8 +49,15 @@ a:hover {
   margin-top: .5em;
 }
 
+img {
+  width: 100%;
+  margin: .3em 0;
+}
+
 img.logo {
+  margin: auto;
   height: 1em;
+  width: auto;
   border-radius: 2px;
   margin-bottom: 2px;
   vertical-align: text-bottom;
@@ -73,6 +84,20 @@ nav.menu a.active {
 .container {
   max-width: 500px;
   margin: 0 auto;
+}
+
+.inside {
+  margin: 0;
+  font-size: .9rem;
+  padding: 0;
+  padding-bottom: .7em;
+}
+
+.outside>.inside {
+  padding-left: .7em;
+  margin-left: .5em !important;
+  border-left: solid white 3px;
+  border-top-left-radius: 5px;
 }
 
 .entry figure {

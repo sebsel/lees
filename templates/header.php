@@ -6,6 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/reset.css">
     <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="icon" href="/assets/images/lees-logo.png" />
+    <link rel="apple-touch-icon" href="/assets/images/lees-logo.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Lees">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+    <script>
+    /* for iOS webapp mode! */
+    (function(document,navigator,standalone) {
+      if (standalone in navigator && navigator[standalone]) {
+        var curnode,location=document.location,stop=/^(a|html)$/i;
+        document.addEventListener("click", function(e) {
+          curnode=e.target;
+          while (!stop.test(curnode.nodeName)) {
+            curnode=curnode.parentNode;
+          }
+          if ("href" in curnode && (curnode.href.indexOf("http") || ~curnode.href.indexOf(location.host)) && curnode.target == false) {
+            e.preventDefault();
+            location.href=curnode.href
+          }
+        },false);
+      }
+    })(document,window.navigator,"standalone");
+    </script>
   </head>
   <body>
 

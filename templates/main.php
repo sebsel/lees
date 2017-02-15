@@ -17,6 +17,10 @@
 
     <footer class="cf">
       <?php if (url::path()=='new'): ?>
+        <?php
+        if (0 < ($n = (db::count('entry', ['status' => 'new']) - 10)))
+          printf(l::get('n-new-items', '%s new items'), $n);
+        ?>
         <input type="submit" value="<?=l::get('mark-all-read', 'Mark all items as read')?>" class="right">
       <?php endif; ?>
     </footer>

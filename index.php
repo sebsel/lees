@@ -26,7 +26,7 @@ router([
         $filter = 'read'; // archive: already read
       }
 
-      $entries = (new Reader())->entries($filter);
+      $entries = (new Reader())->entries($filter, 10);
 
       template('main', [
         'entries' => $entries
@@ -201,14 +201,14 @@ router([
         foreach (dir::read($path.DS.$year) as $day) {
           foreach (dir::read($path.DS.$year.DS.$day) as $entry) {
             $id = $year.'/'.$day.'/'.substr($entry,0,13);
-            $status = substr($entry,14,-4);
-            $status = $status ? $status : 'new';
+            $entry = new Entry($id);
 
             db::insert('entry', [
               'id' => $id,
-              'status' => $status
+              'url' => $entry->url,
+              'status' => ($entry->status ? $entry->status : 'new')
             ]);
-            echo "$id $status\n";
+            echo "$id\n";
           }
         }
       }

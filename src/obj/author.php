@@ -2,7 +2,7 @@
 
 namespace Sebsel\Lees;
 
-use Obj, Url, F, Yaml, Remote;
+use Obj, A, Url, F, Yaml, Remote;
 
 class Author extends Obj {
 
@@ -19,18 +19,8 @@ class Author extends Obj {
         $r = remote::get($data['url']);
 
         $mf2 = Mf2::toJf2(Mf2::parse($r->content, $data['url']));
-
-        $card = [];
-
-        if ($mf2['type'] == 'card') $card = $mf2;
-        elseif (isset($mf2['children'])) {
-          foreach ($mf2['children'] as $child) {
-            if ($child['type'] == 'card') {
-              $card = $child;
-              break;
-            }
-          }
-        }
+        $card = Mf2::findCard($mf2);
+        if ($card == false) $card = [];
 
         yaml::write($file, $card);
         if (isset($card['url'])) $data = $card;
@@ -38,6 +28,11 @@ class Author extends Obj {
     }
 
     parent::__construct($data);
+  }
+
+  function url() {
+    if(is_array($this->url)) return a::first($this->url);
+    return $this->url;
   }
 
   function __toString() {

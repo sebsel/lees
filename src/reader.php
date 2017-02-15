@@ -25,11 +25,12 @@ class Reader {
     return $this->subscriptions;
   }
 
-  function entries($status = null, $num = 10) {
+  function entries($status = null, $num = 10, $direction = 'asc') {
     $entries = new Collection();
     $status = $status ? $status : 'new';
-    $dblist = db::select('entry', '*', ['status' => $status], 'id desc', 0,$num);
+    $dblist = db::select('entry', '*', ['status' => $status], 'id '.$direction, 0,$num);
 
+    $n = 0;
     foreach ($dblist as $entry) {
       $entries->append($n++, new Entry($entry->id));
     }

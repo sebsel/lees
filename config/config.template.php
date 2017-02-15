@@ -12,7 +12,7 @@ c::set('filter-read', true);
 
 // DB settings, see Kirby's docs
 c::set('db.type', 'sqlite');
-c::set('db.name', 'data'.DS.'database.db');
+c::set('db.name', dirname(__DIR__).DS.'data'.DS.'database.db');
 // CREATE TABLE 'entry' ('id' TEXT PRIMARY KEY NOT NULL, 'status' TEXT)
 // with an index on 'status'
 
